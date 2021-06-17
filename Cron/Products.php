@@ -12,15 +12,19 @@ class Products
     //  */
      private $categoryLinkManagement;
      protected $_productCollectionFactory;
+     protected $dateTimeFactory;
 
     public function __construct(
         CategoryLinkManagementInterface $categoryLinkManagement,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezoneInterface,
         array $data = []
 
     ) {
         $this->categoryLinkManagement = $categoryLinkManagement;
         $this->_productCollectionFactory = $productCollectionFactory;
+        $this->_dateTimeFactory = $dateTimeFactory;
+
     }
 
     /**
@@ -47,11 +51,14 @@ class Products
 		return $this->categoryLinkManagement; 
 	}
 
-    public function execute() {			
+    public function execute() {	
 
-	    $to = date("Y-m-d h:i:s"); // current date
-	    $from = strtotime('-3 day', strtotime($to));
-	    $from = date('Y-m-d h:i:s', $from); // 3 days before
+        $dateModel = $this->dateTimeFactory->create();
+        $to = $dateModel->gmtDate();
+	    //$to = date("Y-m-d h:i:s"); // current date
+	    $from = strtotime('-3 day', strtotime($to));   // current date
+	    //$from = date('Y-m-d h:i:s', $from); // 3 days before
+        $from = $this->_dateModel->gmtDate('Y-m-d' $from);  // 3 days before
 
     	$productList = $this->_productCollectionFactory->create();
     	$productList->addFieldToFilter('created_at', array('from'=>$from, 'to'=>$to));

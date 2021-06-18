@@ -17,7 +17,7 @@ class Products
     public function __construct(
         CategoryLinkManagementInterface $categoryLinkManagement,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezoneInterface,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTimeFactory,
         array $data = []
 
     ) {
@@ -58,7 +58,7 @@ class Products
 	    //$to = date("Y-m-d h:i:s"); // current date
 	    $from = strtotime('-3 day', strtotime($to));   // current date
 	    //$from = date('Y-m-d h:i:s', $from); // 3 days before
-        $from = $this->_dateModel->gmtDate('Y-m-d' $from);  // 3 days before
+        $from = $this->dateModel->gmtDate('Y-m-d' $from);  // 3 days before
 
     	$productList = $this->_productCollectionFactory->create();
     	$productList->addFieldToFilter('created_at', array('from'=>$from, 'to'=>$to));
